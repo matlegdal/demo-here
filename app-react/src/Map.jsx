@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './Map.css';
 import * as env from './env';
-// import H from 'here-js-api/scripts/mapsjs-core';
-// import 'here-js-api/scripts/mapsjs-service';
 
 export default class Map extends Component {
     constructor(props) {
@@ -23,6 +21,9 @@ export default class Map extends Component {
                 center: { lat: 52.5, lng: 13.4 }
             }
         );
+
+        this.mapEvents = new window.H.mapevents.MapEvents(this.map);
+        this.behavior = new window.H.mapevents.Behavior(this.mapEvents);
     }
 
     render() {
