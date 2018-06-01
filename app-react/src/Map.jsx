@@ -10,20 +10,27 @@ export default class Map extends Component {
             app_code: env.APP_CODE
         });
         this.defaultLayers = this.platform.createDefaultLayers();
+        this.state = {
+            zoom: 15,
+            centerLocation: {
+                lat: 46.830545,
+                lng: -71.306222
+            }
+        };
     }
 
     componentDidMount() {
-        this.map = new window.H.Map(
+        const map = new window.H.Map(
             document.getElementById('map'),
             this.defaultLayers.normal.map,
             {
-                zoom: 10,
-                center: { lat: 52.5, lng: 13.4 }
+                zoom: this.state.zoom,
+                center: this.state.centerLocation
             }
         );
-
-        this.mapEvents = new window.H.mapevents.MapEvents(this.map);
-        this.behavior = new window.H.mapevents.Behavior(this.mapEvents);
+        const mapEvents = new window.H.mapevents.MapEvents(map);
+        const behavior = new window.H.mapevents.Behavior(mapEvents);
+        this.setState({ map, mapEvents, behavior });
     }
 
     render() {
