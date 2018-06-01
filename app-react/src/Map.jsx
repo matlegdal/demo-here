@@ -13,6 +13,9 @@ export default class Map extends Component {
         this.state = {
             markers: []
         };
+
+        // Bindings des méthodes
+        this.updatePosition = this.updatePosition.bind(this);
     }
 
     componentDidMount() {
@@ -33,7 +36,13 @@ export default class Map extends Component {
         const behavior = new window.H.mapevents.Behavior(mapEvents);
         const ui = window.H.ui.UI.createDefault(map, this.defaultLayers, 'fr-FR');
         this.setState({ map, mapEvents, behavior, ui });
+
+        // Add a marker to fujitsu
         this.addMarker(map, fujitsu);
+
+        // add marker to current position
+        navigator.geolocation.watchPosition(this.updatePosition);
+
     }
 
     addMarker(map, pos) {
@@ -42,6 +51,15 @@ export default class Map extends Component {
         let markers = this.state.markers.slice();
         markers.push(marker);
         this.setState({ markers });
+    }
+
+    updatePosition(evt) {
+        const pos = {
+            lat: evt.coords.latitude,
+            lng: evt.coords.longitude
+        };
+        this.addMarker(this.state.map, pos);
+        this.state.map.setCenter(pos);
     }
 
     render() {
