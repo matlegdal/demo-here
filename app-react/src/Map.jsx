@@ -11,26 +11,37 @@ export default class Map extends Component {
         });
         this.defaultLayers = this.platform.createDefaultLayers();
         this.state = {
-            zoom: 15,
-            centerLocation: {
-                lat: 46.830545,
-                lng: -71.306222
-            }
+            markers: []
         };
     }
 
     componentDidMount() {
+        const fujitsu = {
+            lat: 46.830545,
+            lng: -71.306222
+        };
         const map = new window.H.Map(
             document.getElementById('map'),
             this.defaultLayers.normal.map,
             {
-                zoom: this.state.zoom,
-                center: this.state.centerLocation
+                zoom: 15,
+                center: fujitsu
             }
         );
+        window.addEventListener('resize', () => map.getViewPort().resize());
         const mapEvents = new window.H.mapevents.MapEvents(map);
         const behavior = new window.H.mapevents.Behavior(mapEvents);
-        this.setState({ map, mapEvents, behavior });
+        const ui = window.H.ui.UI.createDefault(map, this.defaultLayers, 'fr-FR');
+        this.setState({ map, mapEvents, behavior, ui });
+        this.addMarker(map, fujitsu);
+    }
+
+    addMarker(map, pos) {
+        const marker = new window.H.map.Marker(pos);
+        map.addObject(marker);
+        let markers = this.state.markers.slice();
+        markers.push(marker);
+        this.setState({ markers });
     }
 
     render() {
