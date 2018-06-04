@@ -15,8 +15,9 @@ export class Route {
                     routeLine
                 };
             });
+            this.routeLineGroup = routeLineGroup;
             map.addObject(routeLineGroup);
-            map.setViewBounds(routeLineGroup.getBounds());
+            // map.setViewBounds(routeLineGroup.getBounds());
         }
     }
 
