@@ -3,8 +3,12 @@ export function Route(map, platform, routeOptions) {
     const onSuccess = function (result) {
         if (result.response.route) {
             let routes = result.response.route;
-            routes.forEach((route) => drawRoute(map, route));
-            // map.setViewBounds(routeLine.getBounds());
+            let routeLines = routes.map((route) => drawRoute(map, route));
+            let routeLineGroup = new window.H.map.Group({
+                objects: routeLines
+            });
+            map.addObject(routeLineGroup);
+            map.setViewBounds(routeLineGroup.getBounds());
         }
     };
     const onError = function (err) {
@@ -34,5 +38,5 @@ function drawRoute(map, route) {
         }
     });
 
-    map.addObject(routeLine);
+    return routeLine;
 }
