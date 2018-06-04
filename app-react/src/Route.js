@@ -6,10 +6,14 @@ export class Route {
 
     onSuccess(map, result) {
         if (result.response.route) {
-            let routes = result.response.route;
-            let routeLines = routes.map((route) => drawRoute(map, route));
-            let routeLineGroup = new window.H.map.Group({
-                objects: routeLines
+            let routeLineGroup = new window.H.map.Group();
+            this.routes = result.response.route.map(route => {
+                let routeLine = drawRoute(map, route);
+                routeLineGroup.addObject(routeLine);
+                return {
+                    route,
+                    routeLine
+                };
             });
             map.addObject(routeLineGroup);
             map.setViewBounds(routeLineGroup.getBounds());

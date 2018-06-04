@@ -22,18 +22,11 @@ export default class Map extends Component {
 
     componentDidMount() {
         let pos = { lat: 46.830545, lng: -71.306222 };
-        try {
-            pos = navigator.geolocation.getCurrentPosition();
-        } catch (err) {
-            pos = { lat: 46.830545, lng: -71.306222 };
-        }
-
         const map = new window.H.Map(document.getElementById('map'), this.defaultLayers.normal.map, { zoom: 15, center: pos });
         const mapEvents = new window.H.mapevents.MapEvents(map);
         const behavior = new window.H.mapevents.Behavior(mapEvents);
         const ui = window.H.ui.UI.createDefault(map, this.defaultLayers, 'fr-FR');
-        const router = this.platform.getRoutingService();
-        this.setState({ map, mapEvents, behavior, ui, router });
+        this.setState({ map, mapEvents, behavior, ui });
 
         // Permet le resizing
         window.addEventListener('resize', () => map.getViewPort().resize());
@@ -60,9 +53,7 @@ export default class Map extends Component {
         this.state.map.setCenter(pos);
         // add route
         const home = { lat: 46.758685, lng: -71.293526 };
-        if (!this.state.routes) {
-            this.drawRoute(home);
-        }
+        this.drawRoute(home);
     }
 
     drawRoute(toCoords, fromCoords = this.state.currentPos, routeOptions = {
@@ -71,13 +62,14 @@ export default class Map extends Component {
         alternatives: 2,
         routeattributes: 'waypoints,summary,shape,legs',
         maneuverattributes: 'direction,action',
-    }
-    ) {
+    }) {
         // add marker to destination 
         this.addMarker(this.state.map, toCoords);
-        // draw route
+        // Add waypoints to route
         routeOptions['waypoint0'] = coordsToWaypointString(fromCoords);
         routeOptions['waypoint1'] = coordsToWaypointString(toCoords);
+        
+        // draw routes
         const routes = new Route(this.state.map, this.platform, routeOptions);
         this.setState({ routes });
     }
