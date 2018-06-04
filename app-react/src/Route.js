@@ -1,6 +1,10 @@
-export function Route(map, platform, routeOptions) {
-    const router = platform.getRoutingService();
-    const onSuccess = function (result) {
+export class Route {
+    constructor(map, platform, routeOptions) {
+        this.router = platform.getRoutingService();
+        this.router.calculateRoute(routeOptions, (result) => this.onSuccess(map, result), (err) => this.onError(map, err));
+    }
+
+    onSuccess(map, result) {
         if (result.response.route) {
             let routes = result.response.route;
             let routeLines = routes.map((route) => drawRoute(map, route));
@@ -10,12 +14,11 @@ export function Route(map, platform, routeOptions) {
             map.addObject(routeLineGroup);
             map.setViewBounds(routeLineGroup.getBounds());
         }
-    };
-    const onError = function (err) {
-        console.error('error', err);
-    };
+    }
 
-    router.calculateRoute(routeOptions, onSuccess, onError);
+    onError(map, err) {
+        console.error('error', err);
+    }
 }
 
 export function coordsToWaypointString(coords) {

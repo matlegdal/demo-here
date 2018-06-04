@@ -78,7 +78,8 @@ export default class Map extends Component {
         // draw route
         routeOptions['waypoint0'] = coordsToWaypointString(fromCoords);
         routeOptions['waypoint1'] = coordsToWaypointString(toCoords);
-        this.setState({ routes: new Route(this.state.map, this.platform, routeOptions) });
+        const routes = new Route(this.state.map, this.platform, routeOptions);
+        this.setState({ routes });
     }
 
     render() {
