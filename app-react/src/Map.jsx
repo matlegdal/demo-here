@@ -39,6 +39,7 @@ export default class Map extends Component {
         window.addEventListener('resize', () => map.getViewPort().resize());
 
         // add marker to current position and watch the position
+        navigator.geolocation.getCurrentPosition(this.updatePosition);
         navigator.geolocation.watchPosition(this.updatePosition);
     }
 
@@ -64,7 +65,14 @@ export default class Map extends Component {
         }
     }
 
-    drawRoute(toCoords, fromCoords = this.state.currentPos, routeOptions = { mode: 'fastest;car', representation: 'display', alternatives: 2 }) {
+    drawRoute(toCoords, fromCoords = this.state.currentPos, routeOptions = {
+        mode: 'fastest;car',
+        representation: 'display',
+        alternatives: 2,
+        routeattributes: 'waypoints,summary,shape,legs',
+        maneuverattributes: 'direction,action',
+    }
+    ) {
         // add marker to destination 
         this.addMarker(this.state.map, toCoords);
         // draw route

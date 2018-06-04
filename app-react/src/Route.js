@@ -31,12 +31,7 @@ function drawRoute(map, route) {
         strip.pushLatLngAlt(parts[0], parts[1]);
     });
 
-    let routeLine = new window.H.map.Polyline(strip, {
-        style: {
-            strokeColor: 'blue',
-            lineWidth: 3
-        }
-    });
+    let routeLine = new window.H.map.Polyline(strip);
 
     return routeLine;
 }
